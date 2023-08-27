@@ -1,0 +1,50 @@
+<app-topbar></app-topbar>
+
+<div class="board container" *ngIf="board">
+  <div class="board-header-container">
+    <app-inline-form
+      class="edit-board-form"
+      [defaultText]="board.title"
+      [title]="board.title"
+      (handleSubmit)="updateBoardName($event)"
+    ></app-inline-form>
+    <div class="delete-board" (click)="deleteBoard()">Delete Board</div>
+  </div>
+  <div class="columns colum-grid">
+    <div class="column" *ngFor="let colum of colums">
+      <div class="column-title">
+        <app-inline-form
+          class="edit-column-form"
+          [defaultText]="colum.title"
+          [title]="colum.title"
+          (handleSubmit)="updateColumName($event, colum._id)"
+        ></app-inline-form>
+        <img
+          src="assets/close_icon.svg"
+          class="column-delete-icon"
+          (click)="deleteColum(colum._id)"
+        />
+      </div>
+      <div *ngFor="let task of getTasksByColum(colum._id, tasks)" class="task" (click)="openTask(task._id)">
+        {{ task.title }}
+      </div>
+      <app-inline-form
+        class="create-task-form"
+        defaultText="Add a card"
+        [hasButton]="true"
+        buttonText="Add card"
+        inputPlaceholder="Enter a title for this card"
+        (handleSubmit)="createTask($event, colum._id)"
+      ></app-inline-form>
+    </div>
+    <app-inline-form
+      class="create-column-form"
+      defaultText="Add a list"
+      [hasButton]="true"
+      buttonText="Add list"
+      inputPlaceholder="Add column name"
+      (handleSubmit)="createColumn($event)"
+    ></app-inline-form>
+  </div>
+</div>
+<router-outlet></router-outlet>
